@@ -9,24 +9,25 @@ const setOutput = process.stdout;
 
 // Variables
 let audio;
+let songs;
 let currentSong;
 let selected = 1;
 
 
 async function init(){
-    FindSongs();
     prepareTerminal();
+    FindSongs();
     awaitAudioModule();
     WelcomeUser();
 };
 
 
-async function prepareTerminal(){
+function prepareTerminal(){
     setInput.setEncoding('utf-8');
     setInput.setRawMode(true);
 };
-async function FindSongs(){
-    let songs = fs.readdirSync(pathToSongs).filter((item) => item.endsWith('.mp3'));
+function FindSongs(){
+    songs = fs.readdirSync(pathToSongs).filter((item) => item.endsWith('.mp3'));
 };
 async function awaitAudioModule(){
     let audioModule = await import('audio');
@@ -35,7 +36,7 @@ async function awaitAudioModule(){
 function WelcomeUser(){
     console.log(`🎶 Welcome to the Terminal Music Player 🎶\n`);
     displaySongs();
-    console.log(`\n🎵 Select a number to play the song`);
+    console.log(`🎵 Select a number to play the song`);
 };
 
 
@@ -47,7 +48,7 @@ function displaySongs(){
         
         let song = songs[i].split('.')[0];
         if (selected === i+1){
-            setOutput.write(`->${i+1}: ${song}\n`);
+            setOutput.write(`-->${i+1}: ${song}\n`);
         }else{
             setOutput.write(`${i+1}: ${song}\n`);
         };
@@ -66,6 +67,7 @@ function goUp(){
         selected--;
     };
     displaySongs();
+    setOutput.moveCursor(0,1);
 };
 function goDown(){
     if (selected === songs.length){
@@ -75,10 +77,11 @@ function goDown(){
     };
 
     displaySongs();
+    setOutput.moveCursor(0,1);
 };
 
 
-async function selectSong(){
+async function playSong(){
     if (currentSong && currentSong.playing){
         currentSong.stop();
     };
@@ -89,9 +92,17 @@ async function selectSong(){
     currentSong.play();
 };
 
+function pauseResumeSong(){
+    if (currentSong.paused){
+        currentSong.resume();
+    }else{  
+        currentSong.pause();
+    };
+};
+
 
 function handleInputs(input){
-    if (input === "q"){
+    if (input.toLowerCase() === "q"){
         quitApp();
     };
     if (input[2] === 'A'){
@@ -103,14 +114,16 @@ function handleInputs(input){
         goDown();
     };
     if (input === '\r'){
-        selectSong();
+        playSong();
+    };
+    if (input === " "){
+        pauseResumeSong();
     };
 };
 
 
 async function main(){
     await init();
-
     setInput.on('data',handleInputs);
 };
 main();
