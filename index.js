@@ -10,14 +10,24 @@ const setOutput = process.stdout;
 // Variables
 setInput.setEncoding('utf-8');
 setInput.setRawMode(true);
-let songs = fs.readdirSync(pathToSongs).filter((item)=> item.endsWith('.mp3'));
+let songs = fs.readdirSync(pathToSongs).filter((item) => item.endsWith('.mp3'));
 let selected = 1;
+
+async function init(){
+    await awaitAudio();
+    WelcomeUser();
+};
+
+async function awaitAudio(){
+    let audioModule = await import('audio');
+    let audio = audioModule.default;
+};
 
 function WelcomeUser(){
     console.log(`🎶 Welcome to the Terminal Music Player 🎶\n`);
     displaySongs();
     console.log(`\n🎵 Select a number to play the song`);
-}
+};
 
 function displaySongs(){
     setOutput.cursorTo(1,2);
@@ -33,8 +43,6 @@ function displaySongs(){
         };
     };
 };
-
-WelcomeUser()
 
 function quitApp(){
     setInput.setRawMode(false);
@@ -62,18 +70,21 @@ function goDown(){
     displaySongs();
 };
 
+async function main(){
+    await init();
 
-
-setInput.on('data',(input)=>{
-    if (input === "q"){
-        quitApp();
-    };
-    if (input[2] === 'A'){
-        // When up arrow key is pressed
-        goUp();
-    };
-    if (input[2] === 'B'){
-        // When down arrow key is pressed
-        goDown();
-    };
-});
+    setInput.on('data',(input)=>{
+        if (input === "q"){
+            quitApp();
+        };
+        if (input[2] === 'A'){
+            // When up arrow key is pressed
+            goUp();
+        };
+        if (input[2] === 'B'){
+            // When down arrow key is pressed
+            goDown();
+        };
+    });
+}
+main()
