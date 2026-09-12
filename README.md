@@ -10,15 +10,15 @@ Navigate through songs using your keyboard, play audio directly from the termina
 
 ### Current Features
 
-* 🎵 Display all available songs from the `songs/` directory
-* ⬆️ Navigate up using the Up Arrow key
-* ⬇️ Navigate down using the Down Arrow key
-* ▶️ Play the selected song using Enter
-* ⏸️ Pause and resume playback using Space
-* 🔇 Mute audio using M
-* ❌ Quit the application using Q
-* 🖥️ Interactive terminal UI
-* ⚡ Keyboard input handled through raw terminal mode
+* Display all available songs from the `songs/` directory
+* Navigate up using the Up Arrow key
+* Navigate down using the Down Arrow key
+* Play the selected song using Enter
+* Pause and resume playback using Space
+* Mute audio using M
+* Quit the application using Q
+* Interactive terminal UI
+* Keyboard input handled through raw terminal mode
 
 ---
 

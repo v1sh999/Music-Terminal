@@ -6,6 +6,7 @@ const path = require('path');
 const pathToSongs = path.join(__dirname,'songs');
 const setInput = process.stdin;
 const setOutput = process.stdout;
+const blankSpaces = 61;
 
 // Variables
 let audio;
@@ -47,14 +48,14 @@ function initialRender(){
     console.log("┌────────────────────────────────────────────────────────────┐");
     console.log("│ 🎶 Terminal Music Player                                   │");
     console.log("├────────────────────────────────────────────────────────────┤");
-    console.log(`│   Playing: ${currentSongName}                                       │`)
-    console.log(`│   Status: ${isPaused ? "Paused                                           │" : "Playing                                          │"}`);
+    console.log(`│   Playing: ${currentSongName}${" ".repeat(blankSpaces - 13 - currentSongName.length)}│`)
+    console.log(`│   Status: ${isPaused ? `Paused${" ".repeat(blankSpaces - 18)}│` : `Playing${" ".repeat(blankSpaces - 19)}│`}`);
     console.log("├────────────────────────────────────────────────────────────┤");
     songs.forEach((song, index) => {
         if (selected === index + 1) {
-            console.log(`│ ▶ ${song}                                          `);
+            console.log(`│ ▶ ${song}${" ".repeat(blankSpaces - 4 - song.length)}│`);
         } else {
-            console.log(`│   ${song}`);
+            console.log(`│   ${song}${" ".repeat(blankSpaces - 4 - song.length)}│`);
         }
     });
     console.log("├────────────────────────────────────────────────────────────┤");
@@ -64,7 +65,7 @@ function initialRender(){
 function render(){
     initialRender()
     setOutput.moveCursor(0,1);
-}
+};
 function quitApp(){
     setInput.setRawMode(false);
     setInput.pause();
@@ -90,7 +91,7 @@ function goDown(){
 };
 
 // Audio Control functions
-async function playSong(){g
+async function playSong(){
     if (currentSong && currentSong.playing){
         currentSong.stop();
     };
