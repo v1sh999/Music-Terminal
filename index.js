@@ -12,7 +12,8 @@ let audio;
 let songs;
 let currentSong;
 let selected = 1;
-let isPaused = true
+let isPaused = true;
+let currentSongName = 'No song selected';
 
 // Initialization
 async function init(){
@@ -46,6 +47,7 @@ function initialRender(){
     console.log("┌────────────────────────────────────────────────────────────┐");
     console.log("│ 🎶 Terminal Music Player                                   │");
     console.log("├────────────────────────────────────────────────────────────┤");
+    console.log(`│   Playing: ${currentSongName}                                       │`)
     console.log(`│   Status: ${isPaused ? "Paused                                           │" : "Playing                                          │"}`);
     console.log("├────────────────────────────────────────────────────────────┤");
     songs.forEach((song, index) => {
@@ -92,11 +94,24 @@ async function playSong(){
     if (currentSong && currentSong.playing){
         currentSong.stop();
     };
+    
     let selectedSong = songs[selected - 1];
     let songPath = path.join(__dirname,'songs',selectedSong);
     currentSong = audio(songPath);
-    await currentSong;
+
+    const songInstance = currentSong;
+    
+    currentSong.on('ended',()=>{
+        if (songInstance === currentSong){
+            currentSongName = 'No song selected';
+            render();
+        };
+    });
+    
+    await currentSong.ready;
     currentSong.play();
+
+    currentSongName = selectedSong;
     isPaused = false;
     render();
 };
