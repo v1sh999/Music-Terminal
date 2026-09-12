@@ -30,36 +30,43 @@ function displaySongs(){
 };
 displaySongs();
 
+function quitApp(){
+    setInput.setRawMode(false);
+    setInput.pause();
+    console.clear();
+    process.exit(0);
+};
+
+function goUp(){
+    if (selected === 1){
+        selected = songs.length;
+    }else{
+        selected--;
+    }
+    displaySongs();
+};
+
+function goDown(){
+    if (selected === songs.length){
+        selected = 1;
+    }else{
+        selected++;
+    }
+
+    displaySongs();
+};
 
 setInput.on('data',(input)=>{
-    // Quit App
-    if (input === 'q'){
-        setInput.pause();
-        setInput.setRawMode(false);
-        
-        setOutput.write("\x1bc");
-        
-        process.exit(0);
+    if (input === "q"){
+        quitApp();
     };
-
-    // When pressed Up Arrow Key
     if (input[2] == 'A'){
-        if (selected === 1){
-            selected = songs.length;
-        }else{
-            selected--;
-        }
-        displaySongs();
+        // When up arrow key is pressed
+        goUp();
     };
-
-    // When pressed Down Arrow Key
     if (input[2] == 'B'){
-        if (selected === songs.length){
-            selected = 1;
-        }else{
-            selected++;
-        }
-
-        displaySongs();
+        // When down arrow key is pressed
+        goDown();
     };
+
 });
