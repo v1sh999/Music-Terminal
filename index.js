@@ -13,6 +13,7 @@ setInput.setRawMode(true);
 let songs = fs.readdirSync(pathToSongs).filter((item) => item.endsWith('.mp3'));
 let selected = 1;
 let audio;
+let currentSong;
 
 async function init(){
     awaitAudioModule();
@@ -72,12 +73,15 @@ function goDown(){
 };
 
 async function selectSong(){
+    if (currentSong && currentSong.playing){
+        currentSong.stop();
+    };
     let selectedSong = songs[selected - 1];
     let songPath = path.join(__dirname,'songs',selectedSong);
-    let a = audio(songPath);
-    await a;
-    a.play();
-}
+    currentSong = audio(songPath);
+    await currentSong;
+    currentSong.play();
+};
 
 async function main(){
     await init();
@@ -95,8 +99,8 @@ async function main(){
             goDown();
         };
         if (input === '\r'){
-            selectSong()
-        }
+            selectSong();
+        };
     });
-}
-main()
+};
+main();
