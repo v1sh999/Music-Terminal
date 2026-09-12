@@ -90,7 +90,7 @@ function goDown(){
 };
 
 // Audio Control functions
-async function playSong(){
+async function playSong(){g
     if (currentSong && currentSong.playing){
         currentSong.stop();
     };
