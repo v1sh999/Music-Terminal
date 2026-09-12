@@ -13,7 +13,7 @@ let songs;
 let currentSong;
 let selected = 1;
 
-
+// Initialization
 async function init(){
     prepareTerminal();
     FindSongs();
@@ -21,7 +21,7 @@ async function init(){
     WelcomeUser();
 };
 
-
+// Initialization functions
 function prepareTerminal(){
     setInput.setEncoding('utf-8');
     setInput.setRawMode(true);
@@ -39,7 +39,7 @@ function WelcomeUser(){
     console.log(`🎵 Select a number to play the song`);
 };
 
-
+// Terminal Control functions
 function displaySongs(){
     setOutput.cursorTo(1,2);
     
@@ -80,7 +80,7 @@ function goDown(){
     setOutput.moveCursor(0,1);
 };
 
-
+// Audio Control functions
 async function playSong(){
     if (currentSong && currentSong.playing){
         currentSong.stop();
@@ -91,16 +91,26 @@ async function playSong(){
     await currentSong;
     currentSong.play();
 };
-
 function pauseResumeSong(){
-    if (currentSong.paused){
-        currentSong.resume();
-    }else{  
-        currentSong.pause();
+    if (currentSong){
+        if (currentSong.paused){
+            currentSong.resume();
+        }else{  
+            currentSong.pause();
+        };
+    }
+};
+function muteSong(){
+    if (currentSong){
+        if (currentSong.muted){
+            currentSong.muted = false;
+        }else{
+            currentSong.muted = true;
+        };
     };
 };
 
-
+// Input Handler
 function handleInputs(input){
     if (input.toLowerCase() === "q"){
         quitApp();
@@ -119,9 +129,12 @@ function handleInputs(input){
     if (input === " "){
         pauseResumeSong();
     };
+    if (input.toLowerCase() === 'm'){
+        muteSong()
+    };
 };
 
-
+// Jimmathy Main
 async function main(){
     await init();
     setInput.on('data',handleInputs);
