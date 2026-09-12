@@ -43,27 +43,27 @@ function WelcomeUser(){
 
 // Terminal Control functions
 function initialRender(){
-        console.clear();
+    console.clear();
 
     console.log("┌────────────────────────────────────────────────────────────┐");
     console.log("│ 🎶 Terminal Music Player                                   │");
     console.log("├────────────────────────────────────────────────────────────┤");
-    console.log(`│   Playing: ${currentSongName}${" ".repeat(blankSpaces - 13 - currentSongName.length)}│`)
+    console.log(`│   Playing: ${currentSongName}${" ".repeat(blankSpaces - 13 - currentSongName.length)}│`);
     console.log(`│   Status: ${isPaused ? `Paused${" ".repeat(blankSpaces - 18)}│` : `Playing${" ".repeat(blankSpaces - 19)}│`}`);
     console.log("├────────────────────────────────────────────────────────────┤");
     songs.forEach((song, index) => {
         if (selected === index + 1) {
             console.log(`│ ▶ ${song}${" ".repeat(blankSpaces - 4 - song.length)}│`);
-        } else {
+        }else {
             console.log(`│   ${song}${" ".repeat(blankSpaces - 4 - song.length)}│`);
-        }
+        };
     });
     console.log("├────────────────────────────────────────────────────────────┤");
     console.log("│ ENTER Play | SPACE Pause ↑↓ Navigate | M Mute | Q Quit     │");
-    console.log("└────────────────────────────────────────────────────────────┘")
+    console.log("└────────────────────────────────────────────────────────────┘");
 };
 function render(){
-    initialRender()
+    initialRender();
     setOutput.moveCursor(0,1);
 };
 function quitApp(){
