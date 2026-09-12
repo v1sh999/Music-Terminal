@@ -12,6 +12,7 @@ let audio;
 let songs;
 let currentSong;
 let selected = 1;
+let isPaused = true
 
 // Initialization
 async function init(){
@@ -34,26 +35,34 @@ async function awaitAudioModule(){
     audio = audioModule.default;
 };
 function WelcomeUser(){
-    console.log(`🎶 Welcome to the Terminal Music Player 🎶\n`);
-    displaySongs();
-    console.log(`🎵 Select a number to play the song`);
+    initialRender();
+    console.log(`🎵 Select a song to play`);
 };
 
 // Terminal Control functions
-function displaySongs(){
-    setOutput.cursorTo(1,2);
-    
-    for (let i=0;i<songs.length;i++){
-        setOutput.clearLine();
-        
-        let song = songs[i].split('.')[0];
-        if (selected === i+1){
-            setOutput.write(`-->${i+1}: ${song}\n`);
-        }else{
-            setOutput.write(`${i+1}: ${song}\n`);
-        };
-    };
+function initialRender(){
+        console.clear();
+
+    console.log("┌────────────────────────────────────────────────────────────┐");
+    console.log("│ 🎶 Terminal Music Player                                   │");
+    console.log("├────────────────────────────────────────────────────────────┤");
+    console.log(`│   Status: ${isPaused ? "Paused                                           │" : "Playing                                          │"}`);
+    console.log("├────────────────────────────────────────────────────────────┤");
+    songs.forEach((song, index) => {
+        if (selected === index + 1) {
+            console.log(`│ ▶ ${song}                                          `);
+        } else {
+            console.log(`│   ${song}`);
+        }
+    });
+    console.log("├────────────────────────────────────────────────────────────┤");
+    console.log("│ ENTER Play | SPACE Pause ↑↓ Navigate | M Mute | Q Quit     │");
+    console.log("└────────────────────────────────────────────────────────────┘")
 };
+function render(){
+    initialRender()
+    setOutput.moveCursor(0,1);
+}
 function quitApp(){
     setInput.setRawMode(false);
     setInput.pause();
@@ -66,8 +75,7 @@ function goUp(){
     }else{
         selected--;
     };
-    displaySongs();
-    setOutput.moveCursor(0,1);
+    render();
 };
 function goDown(){
     if (selected === songs.length){
@@ -76,8 +84,7 @@ function goDown(){
         selected++;
     };
 
-    displaySongs();
-    setOutput.moveCursor(0,1);
+    render();
 };
 
 // Audio Control functions
@@ -90,14 +97,19 @@ async function playSong(){
     currentSong = audio(songPath);
     await currentSong;
     currentSong.play();
+    isPaused = false;
+    render();
 };
 function pauseResumeSong(){
     if (currentSong){
         if (currentSong.paused){
             currentSong.resume();
+            isPaused = false;
         }else{  
             currentSong.pause();
+            isPaused = true;
         };
+        render();
     }
 };
 function muteSong(){
