@@ -13,9 +13,14 @@ setInput.setRawMode(true);
 let songs = fs.readdirSync(pathToSongs).filter((item)=> item.endsWith('.mp3'));
 let selected = 1;
 
+function WelcomeUser(){
+    console.log(`🎶 Welcome to the Terminal Music Player 🎶\n`);
+    displaySongs();
+    console.log(`\n🎵 Select a number to play the song`);
+}
 
 function displaySongs(){
-    setOutput.cursorTo(0,0);
+    setOutput.cursorTo(1,2);
     
     for (let i=0;i<songs.length;i++){
         setOutput.clearLine();
@@ -28,7 +33,8 @@ function displaySongs(){
         };
     };
 };
-displaySongs();
+
+WelcomeUser()
 
 function quitApp(){
     setInput.setRawMode(false);
@@ -42,7 +48,7 @@ function goUp(){
         selected = songs.length;
     }else{
         selected--;
-    }
+    };
     displaySongs();
 };
 
@@ -51,22 +57,23 @@ function goDown(){
         selected = 1;
     }else{
         selected++;
-    }
+    };
 
     displaySongs();
 };
+
+
 
 setInput.on('data',(input)=>{
     if (input === "q"){
         quitApp();
     };
-    if (input[2] == 'A'){
+    if (input[2] === 'A'){
         // When up arrow key is pressed
         goUp();
     };
-    if (input[2] == 'B'){
+    if (input[2] === 'B'){
         // When down arrow key is pressed
         goDown();
     };
-
 });
