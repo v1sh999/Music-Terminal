@@ -12,15 +12,16 @@ setInput.setEncoding('utf-8');
 setInput.setRawMode(true);
 let songs = fs.readdirSync(pathToSongs).filter((item) => item.endsWith('.mp3'));
 let selected = 1;
+let audio;
 
 async function init(){
-    await awaitAudio();
+    awaitAudioModule();
     WelcomeUser();
 };
 
-async function awaitAudio(){
+async function awaitAudioModule(){
     let audioModule = await import('audio');
-    let audio = audioModule.default;
+    audio = audioModule.default;
 };
 
 function WelcomeUser(){
@@ -70,6 +71,14 @@ function goDown(){
     displaySongs();
 };
 
+async function selectSong(){
+    let selectedSong = songs[selected - 1];
+    let songPath = path.join(__dirname,'songs',selectedSong);
+    let a = audio(songPath);
+    await a;
+    a.play();
+}
+
 async function main(){
     await init();
 
@@ -85,6 +94,9 @@ async function main(){
             // When down arrow key is pressed
             goDown();
         };
+        if (input === '\r'){
+            selectSong()
+        }
     });
 }
 main()
